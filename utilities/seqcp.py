@@ -47,7 +47,7 @@ def promptUser(question):
     """
     while 1:
         sys.stdout.write(question+" ")
-        answer = raw_input()
+        answer = input()
         answer = answer.lower()
         if answer=="n":
             return False
@@ -74,7 +74,7 @@ def main():
     opts,args = parser.parse_args()
 
     if opts.version:
-        print ("seqcp (cgkit %s)"%cgkit.cgkitinfo.version)
+        print(("seqcp (cgkit %s)"%cgkit.cgkitinfo.version))
         sys.exit(0)
 
     if len(args)!=2:
@@ -116,7 +116,7 @@ def main():
         opStr = "Copy"
     
     for srcSeq,dstSeq in processor.sequences():
-        print ("%s: %s -> %s"%(opStr, srcSeq, dstSeq))
+        print(("%s: %s -> %s"%(opStr, srcSeq, dstSeq)))
     
     # Check a file number would get appended to a trailing number in the base name
     if processor.mergesNumbers() and not opts.force:
@@ -127,7 +127,7 @@ def main():
     # Check if an existing file would get overwritten
     overwrites = list(processor.overwrites())
     if len(overwrites)>0 and not opts.force:
-        print ("WARNING: %s files would get overwritten."%len(overwrites))
+        print(("WARNING: %s files would get overwritten."%len(overwrites)))
         if not opts.test and not promptUser("Are you sure to continue?"):
             return
 

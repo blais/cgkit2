@@ -61,7 +61,7 @@ class OsgViewer(Tool):
         elif Nopt.lower()=="softimage":
             self.navigation_mode = 2
         else:
-            raise ValueError, "Unknown navigation mode. '%s'"%Nopt
+            raise ValueError("Unknown navigation mode. '%s'"%Nopt)
 
         Ropt = self.options.render_system
         if Ropt==None or Ropt.lower()=="gl":
@@ -69,7 +69,7 @@ class OsgViewer(Tool):
         elif Ropt.lower()=="d3d":
             self.use_opengl = 0
         else:
-            raise ValueError, "Unknown render system: '%s'"%Ropt
+            raise ValueError("Unknown render system: '%s'"%Ropt)
 
         Topt = self.options.shadow_mode
         if Topt==None or Topt.lower()=="stencil_add":
@@ -79,9 +79,9 @@ class OsgViewer(Tool):
         elif Topt.lower()=="texture":
             self.shadowmode = 2	    
         else:
-            raise ValueError, "Unknown shadow mode: '%s'"%Topt   
+            raise ValueError("Unknown shadow mode: '%s'"%Topt)   
 
-	print "init done"
+	print("init done")
 
 
     def setOptions(self, optparser):
@@ -100,7 +100,7 @@ class OsgViewer(Tool):
         optparser.add_option("-m", "--shadow-mode", metavar="NAME",
                              help="Shadow Mode  (STENCIL_ADD, STENCIL_MOD, TEXTURE")
 
-	print "options set"
+	print("options set")
 
     # init
     def init(self):
@@ -175,7 +175,7 @@ class OsgViewer(Tool):
             res |= KEYMOD_CONTROL
         if mods & 0x0100 or mods & 0x0200:
             res |= KEYMOD_ALT
-            print "ALT"
+            print("ALT")
         return res
 
     # action
@@ -183,7 +183,7 @@ class OsgViewer(Tool):
         # Create a camera control component
         CameraControl(cam=self.cam, mode=self.navigation_mode)
 
-        print "NAV MODE:       ", self.navigation_mode
+        print("NAV MODE:       ", self.navigation_mode)
         
         scene = getScene()
         timer = scene.timer()
@@ -214,15 +214,15 @@ class OsgViewer(Tool):
                 # quit when ESC is pressed
                 code = self.keydict.get(kd[i+1], kd[i+1])
                 if (code == KEY_ALT_LEFT):
-                    print "alt left pressed"
+                    print("alt left pressed")
                 try:
-                    key = unicode(chr(kd[i+1]))
+                    key = str(chr(kd[i+1]))
                 except:
                     key = ""                
                 mods = self.convertMods(kd[i+2])
                 eventmanager.event( KEY_PRESS, KeyEvent(key, code, mods) )
                 if (kd[i+1] == 27):
-                    print "bye bye"
+                    print("bye bye")
                     #running = False
                 i = i+3
 
@@ -236,15 +236,15 @@ class OsgViewer(Tool):
                 # quit when ESC is pressed
                 code = self.keydict.get(kd[i+1], kd[i+1])
                 if (code == KEY_ALT_LEFT):
-                    print "alt left released"                
+                    print("alt left released")                
                 try:
-                    key = unicode(chr(kd[i+1]))
+                    key = str(chr(kd[i+1]))
                 except:
                     key = ""                
                 mods = self.convertMods(kd[i+2])
                 eventmanager.event( KEY_RELEASE, KeyEvent(key, code, mods) )
                 if (kd[i+1] == 27):
-                    print "bye bye"
+                    print("bye bye")
                     #running = False
                 i = i+3                
 
@@ -288,7 +288,7 @@ class OsgViewer(Tool):
             mb = myOsg.pumpMouseDowns()
             i = 0
             while ( i<len(mb) ):
-                print "mousebuttonevent"
+                print("mousebuttonevent")
                 x = mb[i+2]*self.options.width
                 y = mb[i+3]*self.options.height
                 #print "X and Y: ", x, y
@@ -298,7 +298,7 @@ class OsgViewer(Tool):
                 if ( mb[i+1] == 0 ): # MOUSE PRESSED
                     #print "mouse pressed"
                     if ( mb[i] == 1 ): # LEFT_MOUSE
-                        print "left mouse down"
+                        print("left mouse down")
                         eventname = LEFT_DOWN
                         evt = MouseButtonEvent(1, x, y, x0, y0)
                     elif ( mb[i] == 2 ): # MIDDLE_MOUSE
@@ -315,19 +315,19 @@ class OsgViewer(Tool):
                     #print "mouse released"
                     if ( mb[i] == 1 ): # LEFT_MOUSE
                         eventname = LEFT_UP
-                        print "leftup"
+                        print("leftup")
                         evt = MouseButtonEvent(1, x, y, x0, y0)
                     elif ( mb[i] == 2 ): # MIDDLE_MOUSE
                         eventname = MIDDLE_UP
-                        print "middleup"
+                        print("middleup")
                         evt = MouseButtonEvent(2, x, y, x0, y0)
                     elif ( mb[i] == 4 ): # RIGHT_MOUSE
                         eventname = RIGHT_UP
-                        print "rightup"
+                        print("rightup")
                         evt = MouseButtonEvent(3, x, y, x0, y0)
                     else: 
                         eventname = MOUSE_BUTTON_UP
-                        print "up"
+                        print("up")
                         evt = MouseButtonEvent(mb[i], x, y, x0, y0) # ?<---
                     eventmanager.event(eventname, evt)
                 i = i+7                

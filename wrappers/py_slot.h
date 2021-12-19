@@ -40,7 +40,7 @@ using std::string;
 //    .def("onValueChanged", &Slot<double>::onValueChanged, &SlotWrapper<double>::base_onValueChanged) 
 
 // This macro can be used to create a new Python array slot type
-#define ARRAYSLOT(sname,stype) class_<_ArraySlotIterator<stype> >("_"sname"_Iterator", init<ArraySlot<stype>&>()) \
+#define ARRAYSLOT(sname,stype) class_<_ArraySlotIterator<stype> >(("_" sname "_Iterator"), init<ArraySlot<stype>&>())   \
     .def("__iter__", &_ArraySlotIterator<stype>::__iter__) \
     .def("__next__", &_ArraySlotIterator<stype>::next) \
   ; \

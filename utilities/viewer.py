@@ -196,12 +196,12 @@ class Viewer(Tool):
         # Initialize pygame
         passed, failed = pygame.init()
         if failed>0:
-            print("Warning: %d pygame modules couldn't be initialized"%failed)
+            print(("Warning: %d pygame modules couldn't be initialized"%failed))
 
         # Initialize joysticks...
         numjoy = pygame.joystick.get_count()
         if self.options.verbose:
-            print(numjoy, "joysticks available")
+            print((numjoy, "joysticks available"))
 
         self.pygame_joysticks = []
         self.cgkit_joysticks = []
@@ -224,8 +224,8 @@ class Viewer(Tool):
     #            cgj.setAxis(i, j.get_axis(i))
             self.cgkit_joysticks.append(cgj)
             if self.options.verbose:
-                print("Joystick #%d (%s):"%(id, name))
-                print("  %d axes, %d balls, %d buttons, %d hats"%(numaxes, numballs, numbuttons, numhats))
+                print(("Joystick #%d (%s):"%(id, name)))
+                print(("  %d axes, %d balls, %d buttons, %d hats"%(numaxes, numballs, numbuttons, numhats)))
 
         if self.options.disable_spacedevice:
             self.enable_spacedevice = True  # temporarily invert the meaning of -X
@@ -238,7 +238,7 @@ class Viewer(Tool):
             try:
                 self.spacedevice = cgkit.spacedevice.SpaceDevice()
             except RuntimeError as e:
-                print("3DxWare exception:",e)
+                print(("3DxWare exception:",e))
         else:
             if self.options.verbose and self.enable_spacedevice:
                 print("SpaceMouse/SpaceBall module (spacedevice) not available")
@@ -247,9 +247,9 @@ class Viewer(Tool):
         if self.enable_wintab and cgkit.wintab.available():
             if self.options.verbose:
                 info = cgkit.wintab.info(WTI_INTERFACE)
-                print('Wintab identification: "%s"'%info["WINTABID"])
+                print(('Wintab identification: "%s"'%info["WINTABID"]))
                 info = cgkit.wintab.info(WTI_DEVICES)
-                print("Initializing %s..."%info["NAME"])
+                print(("Initializing %s..."%info["NAME"]))
 
             self.wintabcontext = cgkit.wintab.Context()
             ctx = self.wintabcontext
@@ -325,9 +325,9 @@ class Viewer(Tool):
         # Output OpenGL infos...
         if self.options.verbose:
             print("OpenGL information:")
-            print("  Vendor  :",glGetString(GL_VENDOR))
-            print("  Renderer:", glGetString(GL_RENDERER))
-            print("  Version :",glGetString(GL_VERSION))
+            print(("  Vendor  :",glGetString(GL_VENDOR)))
+            print(("  Renderer:", glGetString(GL_RENDERER)))
+            print(("  Version :",glGetString(GL_VERSION)))
             
         # Check if stereo output is active...
         if self.stereo_mode==2:
@@ -354,11 +354,11 @@ class Viewer(Tool):
                     self.spacedevice.setUIMode(True)
                     if self.options.verbose:
                         typ,btns,degs,beep,firmware = self.spacedevice.getDeviceInfo()
-                        print("3D input device:",firmware)
-                        print("%s: %d buttons, %d degrees of freedom"%(typ,btns,degs))
+                        print(("3D input device:",firmware))
+                        print(("%s: %d buttons, %d degrees of freedom"%(typ,btns,degs)))
                     pygame.event.set_allowed(SYSWMEVENT)
                 except RuntimeError as e:
-                    print("SpaceDevice:",e)
+                    print(("SpaceDevice:",e))
                     print("SpaceMouse/SpaceBall support is disabled.")
                     self.spacedevice = None
 
@@ -684,7 +684,7 @@ class Viewer(Tool):
         name,ext = os.path.splitext(self.options.save)
         f = int(round(getScene().timer().frame))
         fname = "%s%04d%s"%(name, f, ext)
-        print('Saving "%s"...'%fname)
+        print(('Saving "%s"...'%fname))
         data = pygame.image.tostring(srf, "RGB")
         img = Image.fromstring("RGB", (srf.get_width(), srf.get_height()), data)
         img.save(fname)

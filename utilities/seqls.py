@@ -57,7 +57,7 @@ class SequenceInfo:
             try:
                 fileInfo = os.stat(str(fileName))
             except OSError:
-                print >>sys.stderr, sys.exc_info()[1]
+                print(sys.exc_info()[1], file=sys.stderr)
                 continue
             size += fileInfo.st_size
             if minMTime is None or fileInfo.st_mtime<minMTime:
@@ -137,7 +137,7 @@ def main():
     opts,args = parser.parse_args()
 
     if opts.version:
-        print ("seqls (cgkit %s)"%cgkit.cgkitinfo.version)
+        print(("seqls (cgkit %s)"%cgkit.cgkitinfo.version))
         sys.exit(0)
 
     if len(args)==0:
@@ -159,9 +159,9 @@ def main():
             for name in glob.glob("%s*"%pattern):
                 if os.path.isdir(name):
                     if opts.long:
-                        print ("%53s/"%name)
+                        print(("%53s/"%name))
                     else:
-                        print ("%s/"%name)
+                        print(("%s/"%name))
     
     # List sequences
     for pattern in args: 
@@ -169,12 +169,12 @@ def main():
         for fseq in fseqs:
             if opts.long:
                 info = SequenceInfo(fseq)
-                print ("%8s  %12s - %12s %-12s %s [%d files]"%(info.sizeStr(),
+                print(("%8s  %12s - %12s %-12s %s [%d files]"%(info.sizeStr(),
                                                         info.minMTimeStr(),
                                                         info.maxMTimeStr(),
                                                         "(%s)"%info.timeSpanStr(),
                                                         fseq,
-                                                        len(fseq)))
+                                                        len(fseq))))
             else:
                 print (fseq)
   

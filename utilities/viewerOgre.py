@@ -61,7 +61,7 @@ class OgreViewer(Tool):
         elif Nopt.lower()=="softimage":
             self.navigation_mode = 2
         else:
-            raise ValueError, "Unknown navigation mode. '%s'"%Nopt
+            raise ValueError("Unknown navigation mode. '%s'"%Nopt)
 
         Ropt = self.options.render_system
         if Ropt==None or Ropt.lower()=="gl":
@@ -69,9 +69,9 @@ class OgreViewer(Tool):
         elif Ropt.lower()=="d3d":
             self.use_opengl = 0
         else:
-            raise ValueError, "Unknown render system: '%s'"%Ropt
+            raise ValueError("Unknown render system: '%s'"%Ropt)
 
-	print "mmmmhh"
+	print("mmmmhh")
 
         Topt = self.options.shadow_mode
         if Topt==None or Topt.lower()=="stencil_add":
@@ -81,9 +81,9 @@ class OgreViewer(Tool):
         elif Topt.lower()=="texture":
             self.shadowmode = 2	    
         else:
-            raise ValueError, "Unknown shadow mode: '%s'"%Topt   
+            raise ValueError("Unknown shadow mode: '%s'"%Topt)   
 
-	print "mmmmhh2"
+	print("mmmmhh2")
 
 
     def setOptions(self, optparser):
@@ -102,7 +102,7 @@ class OgreViewer(Tool):
         optparser.add_option("-m", "--shadow-mode", metavar="NAME",
                              help="Shadow Mode  (STENCIL_ADD, STENCIL_MOD, TEXTURE")
 
-	print "mmmmhh0"
+	print("mmmmhh0")
 
     # init
     def init(self):
@@ -183,7 +183,7 @@ class OgreViewer(Tool):
 
         CameraControl(cam=self.cam, mode=self.navigation_mode)
 	
-	print "mmmmhh3"
+	print("mmmmhh3")
 
         scene = getScene()
         timer = scene.timer()
@@ -193,7 +193,7 @@ class OgreViewer(Tool):
         #myOgre.setAmbient(0,0,0)
 
 	# tell ogre which shadow mode to use
-	print "mmmmhh4"
+	print("mmmmhh4")
 	myOgre.setupShadowMode(self.shadowmode,2048)
 	#myOgre.setupShadowMode(0,512)
 

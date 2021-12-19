@@ -148,12 +148,12 @@ class VaryingVar:
 
         # Check the type
         if info[2]!=self.type:
-            print >>sys.stderr, 'Variable "%s": Invalid type'%self.name
+            print('Variable "%s": Invalid type'%self.name, file=sys.stderr)
             return False
 
         # Check the multiplicity
         if info[3]!=self.mult:
-            print >>sys.stderr, 'Variable "%s": Invalid multiplicty (required %d, got %d)'%(self.name, self.mult, info[3])
+            print('Variable "%s": Invalid multiplicty (required %d, got %d)'%(self.name, self.mult, info[3]), file=sys.stderr)
             return False
 
         # Is the variable stored as var/varfaces? Then convert to varying...
@@ -171,7 +171,7 @@ class VaryingVar:
 
         # Is it really varying?
         if info[1]!=VARYING:
-            print >>sys.stderr, 'Variable "%s": Invalid storage class'%self.name
+            print('Variable "%s": Invalid storage class'%self.name, file=sys.stderr)
             return False
 
         self.obj = obj
@@ -361,7 +361,7 @@ class SurfacePointGenerator:
 
         self._triangles = triangles
         self._area = A
-        print >>sys.stderr, "Surface area:",A
+        print("Surface area:",A, file=sys.stderr)
         
 ######################################################################  
 
@@ -390,12 +390,12 @@ def grow(objs, proc, num=10, resultdesc=["P"]):
     srfs = []
     totalarea = 0.0
     for obj in objs:
-        print >>sys.stderr, 'Preprocessing object "%s"...'%obj.name
+        print('Preprocessing object "%s"...'%obj.name, file=sys.stderr)
         srf = SurfacePointGenerator(obj)
         srfs.append(srf)
         totalarea += srf.getArea()
 
-    print >>sys.stderr, "Total area:",totalarea
+    print("Total area:",totalarea, file=sys.stderr)
 
     # Determine the number of points for each object...
     nums = []
@@ -411,11 +411,11 @@ def grow(objs, proc, num=10, resultdesc=["P"]):
         
     total_n = 0
     for obj,srf,num in zip(objs, srfs, nums):
-        print >>sys.stderr, 'Generating %d points on "%s"...'%(num,obj.name)
+        print('Generating %d points on "%s"...'%(num,obj.name), file=sys.stderr)
         for tri in srf.triangles(num):
             n = tri[1]
             total_n += n
-            print >>sys.stderr, "\015%d..."%total_n,
+            print("\015%d..."%total_n, end=' ', file=sys.stderr)
 
             # Create a list with len(resultdesc) lists (one list per variable)
             valuelsts = []
@@ -436,7 +436,7 @@ def grow(objs, proc, num=10, resultdesc=["P"]):
                     params[name] = values
                 RiCurves(RI_CUBIC, n*[6], RI_NONPERIODIC, params)
                 
-        print >>sys.stderr, ""
+        print("", file=sys.stderr)
 
 
 ######################################################################
@@ -472,7 +472,7 @@ scene = getScene()
 
 # Load the geometry...
 for filename in args:
-    print >>sys.stderr, 'Loading "%s"...'%filename
+    print('Loading "%s"...'%filename, file=sys.stderr)
     load(filename)
 
 # Initialize ri
@@ -488,8 +488,8 @@ procname = scene.getGlobal("proc")
 if opts.proc!=None:
     procname = opts.proc
 procfilename = "%s.py"%procname
-print >>sys.stderr, 'Loading procedure file "%s"...'%procfilename
-execfile(procfilename)
+print('Loading procedure file "%s"...'%procfilename, file=sys.stderr)
+exec(compile(open(procfilename, "rb").read(), procfilename, 'exec'))
 
 # Get a reference to the procedure
 procname = os.path.basename(procname)
@@ -498,7 +498,7 @@ proc = eval("%s"%procname)
 inputpattern = scene.getGlobal("inputpattern")
 if opts.inputpattern!=None:
     inputpattern = opts.inputpattern
-print >>sys.stderr, 'Input pattern: "%s"'%inputpattern
+print('Input pattern: "%s"'%inputpattern, file=sys.stderr)
 
 # Collect all geometry (convert to TriMesh if possible)...
 meshes = []
@@ -517,7 +517,7 @@ for obj in scene.walkWorld():
 
 # No meshes? then exit
 if len(meshes)==0:
-    print >>sys.stderr, "No meshes available"
+    print("No meshes available", file=sys.stderr)
     sys.exit(1)
 
 # Generate the surface points...
@@ -528,15 +528,15 @@ if opts.numpoints!=None:
 
 desc = scene.getGlobal("resultdesc")
 
-print >>sys.stderr, 'Output RIB file: "%s"'%RIBname
-print >>sys.stderr, '#Surface points:',numpoints
+print('Output RIB file: "%s"'%RIBname, file=sys.stderr)
+print('#Surface points:',numpoints, file=sys.stderr)
 
 t1 = time.time()
 grow(objs=meshes, proc=proc, num=numpoints, resultdesc=desc)
 #profile.run("grow(objs=meshes, proc=proc, num=numpoints, resultdesc=desc)", "profile.log")
 t2 = time.time()
 dt = t2-t1
-print >>sys.stderr, "Generation time: %s"%time2str(dt)
+print("Generation time: %s"%time2str(dt), file=sys.stderr)
 
 RiEnd()
 

@@ -48,7 +48,7 @@ def promptUser(question):
     """
     while 1:
         sys.stdout.write(question+" ")
-        answer = raw_input()
+        answer = input()
         answer = answer.lower()
         if answer=="n":
             return False
@@ -66,7 +66,7 @@ def main():
     opts,args = parser.parse_args()
 
     if opts.version:
-        print ("seqrm (cgkit %s)"%cgkit.cgkitinfo.version)
+        print(("seqrm (cgkit %s)"%cgkit.cgkitinfo.version))
         sys.exit(0)
 
     if len(args)<1:
@@ -86,7 +86,7 @@ def main():
     for pattern in args:
         fseqs = sequence.glob(pattern, signedNums=signedNums)
         if len(fseqs)==0:
-            print >>sys.stderr, '%s: No sequence "%s" found.'%(os.path.basename(sys.argv[0]), pattern)
+            print('%s: No sequence "%s" found.'%(os.path.basename(sys.argv[0]), pattern), file=sys.stderr)
             
         for fseq in fseqs:
             sequences.append(fseq)
@@ -98,7 +98,7 @@ def main():
     # Ask for confirmation...
     if not opts.force:
         for fseq in sequences:
-            print fseq
+            print(fseq)
         if len(sequences)==1:
             msg = "Are you sure to delete the above sequence?"
         else:
@@ -108,10 +108,10 @@ def main():
             
     # Delete the sequences..
     for fseq in sequences:
-        print ("Deleting %s"%fseq)
+        print(("Deleting %s"%fseq))
         for fileName in fseq:
             if opts.verbose:
-                print ("Deleting %s"%fileName)
+                print(("Deleting %s"%fileName))
             os.remove(str(fileName))
             
     return 0

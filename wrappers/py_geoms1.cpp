@@ -88,7 +88,7 @@ class GeomObjectWrapper : public GeomObject
   // (and only if the class didn't override the method)
   virtual boost::shared_ptr<SizeConstraintBase> base_slotSizeConstraint(VarStorage storage) const
   {
-    throw ENotImplementedError("The method slotSizeConstraint() is not implemented.");    
+    throw ENotImplementedError("The method slotSizeConstraint() is not implemented.");
   }
 
   virtual BoundingBox boundingBox()
@@ -142,10 +142,10 @@ class _VariableIterator
       string name = it->first;
       const PrimVarInfo& info = it->second;
       it++;
-      return make_tuple(name, info.storage, info.type, info.multiplicity);
+      return boost::python::make_tuple(name, info.storage, info.type, info.multiplicity);
     }
   }
-  
+
 };
 
 _VariableIterator* iterVariables(GeomObject* self)
@@ -163,8 +163,8 @@ object findVariable(GeomObject* self, string name)
   }
   else
   {
-    return make_tuple(name, info->storage, info->type, info->multiplicity);
-  }    
+    return boost::python::make_tuple(name, info->storage, info->type, info->multiplicity);
+  }
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -192,13 +192,13 @@ void class_Geoms()
     .value("HPOINT", HPOINT)
   ;
 
-  class_<GeomObject, GeomObjectWrapper, bases<Component>, boost::noncopyable>("GeomObject", 
+  class_<GeomObject, GeomObjectWrapper, bases<Component>, boost::noncopyable>("GeomObject",
      "This is the base class for all geometry classes.\n\n"
      "This base class already handles the creation of user defined\n"
      "primitive variables.\n\n"
      "A derived class has to implement the following methods:\n"
      "boundingBox(), drawGL(), uniformCount(), varyingCount() and vertexCount()")
-    .def("boundingBox", &GeomObject::boundingBox, &GeomObjectWrapper::boundingBox, 
+    .def("boundingBox", &GeomObject::boundingBox, &GeomObjectWrapper::boundingBox,
 	 "boundingBox() -> BoundingBox\n\n"
 	 "Return the local axis aligned bounding box. The bounding box is\n"
 	 "given with respect to the local transformation L (which is not \n"
@@ -231,7 +231,7 @@ void class_Geoms()
 	 "slotSizeConstraint(storage) -> SizeConstraint\n\n"
 	 "Return a constraint object for primitive variable slots.")
 
-    .def("newVariable", &GeomObjectWrapper::newVariable, 
+    .def("newVariable", &GeomObjectWrapper::newVariable,
 	 (arg("name"), arg("storage"), arg("type"), arg("multiplicity")=1, arg("user_n")=0),
 	 "newVariable(name, storage, type, multiplicity=1, user_n=0)\n\n"
          "Create a new primitive variable. storage must be a value from the\n"

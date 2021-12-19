@@ -22,35 +22,35 @@ def displayInfo(fileNames):
     """Display information about the ffmpeg libs.
     """
     major,minor,micro = avformat.avformat_version()
-    print ("avformat: %s.%s.%s \t(cgkit build: %s.%s.%s)"%(major,minor,micro, decls.LIBAVFORMAT_VERSION_MAJOR, decls.LIBAVFORMAT_VERSION_MINOR, decls.LIBAVFORMAT_VERSION_MICRO))
+    print(("avformat: %s.%s.%s \t(cgkit build: %s.%s.%s)"%(major,minor,micro, decls.LIBAVFORMAT_VERSION_MAJOR, decls.LIBAVFORMAT_VERSION_MINOR, decls.LIBAVFORMAT_VERSION_MICRO)))
     major,minor,micro = avcodec.avcodec_version()
-    print ("avcodec:  %s.%s.%s \t(cgkit build: %s.%s.%s)"%(major,minor,micro, decls.LIBAVCODEC_VERSION_MAJOR, decls.LIBAVCODEC_VERSION_MINOR, decls.LIBAVCODEC_VERSION_MICRO))
+    print(("avcodec:  %s.%s.%s \t(cgkit build: %s.%s.%s)"%(major,minor,micro, decls.LIBAVCODEC_VERSION_MAJOR, decls.LIBAVCODEC_VERSION_MINOR, decls.LIBAVCODEC_VERSION_MICRO)))
     major,minor,micro = avutil.avutil_version()
-    print ("avutil:   %s.%s.%s \t(cgkit build: %s.%s.%s)"%(major,minor,micro, decls.LIBAVUTIL_VERSION_MAJOR, decls.LIBAVUTIL_VERSION_MINOR, decls.LIBAVUTIL_VERSION_MICRO))
+    print(("avutil:   %s.%s.%s \t(cgkit build: %s.%s.%s)"%(major,minor,micro, decls.LIBAVUTIL_VERSION_MAJOR, decls.LIBAVUTIL_VERSION_MINOR, decls.LIBAVUTIL_VERSION_MICRO)))
     major,minor,micro = swscale.swscale_version()
-    print ("swscale:  %s.%s.%s \t(cgkit build: %s.%s.%s)"%(major,minor,micro, decls.LIBSWSCALE_VERSION_MAJOR, decls.LIBSWSCALE_VERSION_MINOR, decls.LIBSWSCALE_VERSION_MICRO))
-    print ("sizeof(AVFormatContext): %s"%ctypes.sizeof(decls.AVFormatContext))
-    print ("sizeof(AVCodecContext): %s"%ctypes.sizeof(decls.AVCodecContext))
-    print ("sizeof(AVPicture): %s"%ctypes.sizeof(decls.AVPicture))
-    print ("sizeof(SwsContext): %s"%ctypes.sizeof(decls.SwsContext))
+    print(("swscale:  %s.%s.%s \t(cgkit build: %s.%s.%s)"%(major,minor,micro, decls.LIBSWSCALE_VERSION_MAJOR, decls.LIBSWSCALE_VERSION_MINOR, decls.LIBSWSCALE_VERSION_MICRO)))
+    print(("sizeof(AVFormatContext): %s"%ctypes.sizeof(decls.AVFormatContext)))
+    print(("sizeof(AVCodecContext): %s"%ctypes.sizeof(decls.AVCodecContext)))
+    print(("sizeof(AVPicture): %s"%ctypes.sizeof(decls.AVPicture)))
+    print(("sizeof(SwsContext): %s"%ctypes.sizeof(decls.SwsContext)))
     
     for fileName in fileNames:
-        print ("\n%s"%fileName)
+        print(("\n%s"%fileName))
         avfile = mediafile.open(fileName)
         for stream in avfile.videoStreams:
             res = "%sx%s"%(stream.width, stream.height)
             pixelAspect = stream.pixelAspect
             if pixelAspect is not None and pixelAspect!=1:
                 res += " (%sx%s)"%(int(round(float(pixelAspect*stream.width))), stream.height)
-            print ('  Video Stream: %s, %s, %gfps, %s, %gkbit/s, codec: "%s" (%s)'%(duration2str(stream.duration, stream.timeBase), res,
+            print(('  Video Stream: %s, %s, %gfps, %s, %gkbit/s, codec: "%s" (%s)'%(duration2str(stream.duration, stream.timeBase), res,
                                                                                     stream.frameRate,
                                                                                     avutil.av_get_pix_fmt_name(stream._codecCtx.pix_fmt),
                                                                                     round(stream.bitRate/1000),
-                                                                                    stream.codecLongName, stream.codecName))
+                                                                                    stream.codecLongName, stream.codecName)))
         for stream in avfile.audioStreams:
-            print ('  Audio Stream: %s, %s channels, %sHz, %gkbit/s, codec: "%s" (%s)'%(duration2str(stream.duration, stream.timeBase),
+            print(('  Audio Stream: %s, %s channels, %sHz, %gkbit/s, codec: "%s" (%s)'%(duration2str(stream.duration, stream.timeBase),
                                                                                         stream.numChannels, stream.sampleRate,
-                                                                                        round(stream.bitRate/1000.0), stream.codecLongName, stream.codecName))
+                                                                                        round(stream.bitRate/1000.0), stream.codecLongName, stream.codecName)))
 #            print stream._codecCtx.sample_fmt
         avfile.close()
 
@@ -69,8 +69,8 @@ def readPackets(fileName):
 
     # Get the AVInputFormat object
     inputFormat = formatCtx.iformat.contents
-    print ("Format: %s (%s)"%(inputFormat.long_name, inputFormat.name))
-    print ("Duration: %s min"%(formatCtx.duration/decls.AV_TIME_BASE/60))
+    print(("Format: %s (%s)"%(inputFormat.long_name, inputFormat.name)))
+    print(("Duration: %s min"%(formatCtx.duration/decls.AV_TIME_BASE/60)))
     
     # Iterate over the streams
     videoIdx = None
@@ -81,11 +81,11 @@ def readPackets(fileName):
         fourCC = "%s%s%s%s"%(chr(v&0xff), chr((v>>8)&0xff), chr((v>>16)&0xff), chr((v>>24)&0xff))
         if codecCtx.codec_type==decls.CODEC_TYPE_VIDEO:
             videoIdx = i
-            print ("Stream %s: Video '%s', %sx%s"%(i,fourCC, codecCtx.width, codecCtx.height))
+            print(("Stream %s: Video '%s', %sx%s"%(i,fourCC, codecCtx.width, codecCtx.height)))
         elif codecCtx.codec_type==decls.CODEC_TYPE_AUDIO:
-            print ("Stream %s: Audio '%s'"%(i,fourCC))
+            print(("Stream %s: Audio '%s'"%(i,fourCC)))
         else:
-            print ("Stream %s: Other"%i)
+            print(("Stream %s: Other"%i))
 
     if videoIdx is not None:
         stream = formatCtx.streams[videoIdx].contents
@@ -95,7 +95,7 @@ def readPackets(fileName):
         if codec is None:
             raise RuntimeError("Could not find decoder")
         
-        print ("Video Codec: %s"%codec.long_name)
+        print(("Video Codec: %s"%codec.long_name))
         
         # Open the codec
         avcodec.avcodec_open(codecCtx, codec)
@@ -111,7 +111,7 @@ def readPackets(fileName):
         try:
             eof = not avformat.av_read_frame(formatCtx, pkt)
             if not eof:
-                print ("Packet %s, stream_idx:%s, pts:%s, dts:%s, size:%s, duration:%s"%(idx,pkt.stream_index, pkt.pts,pkt.dts,pkt.size,pkt.duration))
+                print(("Packet %s, stream_idx:%s, pts:%s, dts:%s, size:%s, duration:%s"%(idx,pkt.stream_index, pkt.pts,pkt.dts,pkt.size,pkt.duration)))
                 idx += 1
         finally:
             avcodec.av_free_packet(pkt)
@@ -121,7 +121,7 @@ def readPackets(fileName):
 
 def playVideo(fileName):
     vid = mediafile.open(fileName)
-    print ("%s video streams, %s audio streams"%(vid.numVideoStreams(), vid.numAudioStreams()))
+    print(("%s video streams, %s audio streams"%(vid.numVideoStreams(), vid.numAudioStreams())))
     if vid.numVideoStreams()==0:
         print ("No video stream found")
         return
@@ -132,8 +132,8 @@ def playVideo(fileName):
     pygame.init()
     
     stream = vid.videoStreams[0]
-    print ("Video resolution: %sx%s"%(stream.width, stream.height))
-    print (stream._codecCtx.time_base.num, stream._codecCtx.time_base.den)
+    print(("Video resolution: %sx%s"%(stream.width, stream.height)))
+    print((stream._codecCtx.time_base.num, stream._codecCtx.time_base.den))
     
     screen = pygame.display.set_mode((stream.width,stream.height))
 
@@ -141,14 +141,14 @@ def playVideo(fileName):
     for i,data in enumerate(vid.iterData()):
         imgArr = data.numpyArray(pixelFormat=mediafile.RGB, colorAccess=mediafile.SEPARATE_CHANNELS)
 #        img = data.pilImage()
-        print ("frame %s - shape:%s strides:%s"%(i, imgArr.shape, imgArr.strides))
+        print(("frame %s - shape:%s strides:%s"%(i, imgArr.shape, imgArr.strides)))
         pygame.surfarray.blit_array(screen, imgArr)
 
         pygame.display.flip()
 #        if i==30:
 #            break
 
-    print "time:",time.time()-t1 
+    print("time:",time.time()-t1) 
 
     exit_flag = False
     while not exit_flag:
@@ -163,7 +163,7 @@ def playVideo(fileName):
 
 def playAudio(fileName):
     avfile = mediafile.open(fileName)
-    print ("%s video streams, %s audio streams"%(avfile.numVideoStreams(), avfile.numAudioStreams()))
+    print(("%s video streams, %s audio streams"%(avfile.numVideoStreams(), avfile.numAudioStreams())))
     if avfile.numAudioStreams()==0:
         print ("No audio stream found")
         return
@@ -172,9 +172,9 @@ def playAudio(fileName):
         raise RuntimeError("pygame is not installed")
     
     stream = avfile.audioStreams[0]
-    print "%s channels, %sHz"%(stream.numChannels, stream.sampleRate)
-    print stream._codecCtx.sample_fmt
-    print "Duration",stream.duration
+    print("%s channels, %sHz"%(stream.numChannels, stream.sampleRate))
+    print(stream._codecCtx.sample_fmt)
+    print("Duration",stream.duration)
     
     # SEEK TEST
 #    dstPos = stream.duration-400000000L

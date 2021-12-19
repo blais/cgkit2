@@ -19,14 +19,14 @@ message = opts.message
 
 ######################################################################
 
-print >>sys.stderr, "Processing module '%s'..."%modname
+print("Processing module '%s'..."%modname, file=sys.stderr)
 
 # Import module...
-exec "import %s"%modname
-exec "mod = %s"%modname
+exec("import %s"%modname)
+exec("mod = %s"%modname)
 
 # Output header...
-print """# Shadow module for module "%s"
+print("""# Shadow module for module "%s"
 
 try:
 
@@ -36,7 +36,7 @@ try:
 except ImportError:
 
     # Create dummy symbols...
-"""%(modname, modname)
+"""%(modname, modname))
 
 # Create shadow symbols...
 
@@ -60,15 +60,15 @@ for objname in dir(mod):
 
 # Variables...
 for objname, obj in vars:
-    print '    %s = %s'%(objname, repr(obj))
+    print('    %s = %s'%(objname, repr(obj)))
 
-print ""
+print("")
 
 # Callables
 for objname, obj in callables:
-    print '    def %s(*args, **keyargs):'%objname
+    print('    def %s(*args, **keyargs):'%objname)
     msg = "No module named %s."%modname
     if message!="":
         msg += " "+message
-    print '        raise ImportError("%s")\n'%msg
+    print('        raise ImportError("%s")\n'%msg)
 

@@ -46,7 +46,7 @@ def promptUser(question):
     """
     while 1:
         sys.stdout.write(question+" ")
-        answer = raw_input()
+        answer = input()
         answer = answer.lower()
         if answer=="n":
             return False
@@ -71,7 +71,7 @@ def main():
     opts,args = parser.parse_args()
 
     if opts.version:
-        print ("seqmv (cgkit %s)"%cgkit.cgkitinfo.version)
+        print(("seqmv (cgkit %s)"%cgkit.cgkitinfo.version))
         sys.exit(0)
         
     if len(args)!=2:
@@ -106,7 +106,7 @@ def main():
     mover = sequence.MoveSequence(fseqs, dstArg, srcRanges, dstRange, keepExt=not opts.drop_extensions, verbose=opts.verbose)
     
     for srcSeq,dstSeq in mover.sequences():
-        print ("Move: %s -> %s"%(srcSeq, dstSeq))
+        print(("Move: %s -> %s"%(srcSeq, dstSeq)))
         
     
     # Check a file number would get appended to a trailing number in the base name
@@ -118,7 +118,7 @@ def main():
     # Check if an existing file would get overwritten
     overwrites = list(mover.overwrites())
     if len(overwrites)>0 and not opts.force:
-        print ("WARNING: %s files would get overwritten."%len(overwrites))
+        print(("WARNING: %s files would get overwritten."%len(overwrites)))
         if not opts.test and not promptUser("Are you sure to continue?"):
             return
 
